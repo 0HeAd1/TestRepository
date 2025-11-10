@@ -4,13 +4,14 @@
 #include <chrono>   
 #include <vector>
 #include <iomanip>
+#include <map>
 
 using namespace std;
 double a, b, step;
 int n;
 vector<pair<double, double>> vt;
 
-void Exit() {
+void Exits() {
     cout << "Are you sure you want to exit ? (Y / N): ";
     char answ = _getch();
     while (toupper(answ) != 'Y' && toupper(answ) != 'N') answ = _getch();
@@ -178,7 +179,7 @@ void Main_Menu() {
             break;
         case '4':
             system("cls");
-            Exit();
+            Exits();
             break;
         }
     } while (true);
