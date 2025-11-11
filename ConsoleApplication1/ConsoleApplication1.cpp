@@ -4,7 +4,7 @@
 #include <chrono>   
 #include <vector>
 #include <iomanip>
-#include <map>
+
 
 using namespace std;
 double a, b, step;
