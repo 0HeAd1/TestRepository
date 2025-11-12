@@ -5,7 +5,7 @@
 #include <vector>
 #include <iomanip>
 
-//i don`t like this 
+
 using namespace std;
 double a, b, step;
 int n;
