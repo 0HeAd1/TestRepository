@@ -1,15 +1,21 @@
 #include <iostream>
 #include <conio.h>
-#include <thread>   
-#include <chrono>   
+#include <thread>
+#include <chrono>
 #include <vector>
 #include <iomanip>
-
+#include <stdexcept>
+#include "InputN.h"
+#include "InputRange.h"
+#include "logic.h"
+#include "InputStep.h"
 
 using namespace std;
 double a, b, step;
 int n;
 vector<pair<double, double>> vt;
+vector<vector<pair<double, double>>> results;
+
 
 void Exits() {
     cout << "Are you sure you want to exit ? (Y / N): ";
@@ -22,6 +28,7 @@ void Exits() {
     }
     system("cls");
 }
+
 
 void Print() {
     cout << "---RESULTS TABLE---\n\n--------------------------------------\n";
@@ -41,88 +48,81 @@ void Print() {
     system("cls");
 }
 
+
 void calculate() {
     vt.clear();
-    for (double x = a; x <= b; x += step) {
-        double y;
-        if (x < 0) {
-            y = 1;
-            for (double i = 1; i <= n + 1; i++) y *= (double)(x + 3) / (i - x);
-        }
-        else {
-            y = (double)1 / (3 * x + 1);
-            double sum = 0;
-            for (double j = 0; j <= n + 1; j++) {
-                double mult = 1.0;
-                for (double i = 1; i <= n; i++) mult *= (i + (double)(j * j) / (i + x));
-                sum += mult;
-            }
-            y -= sum;
-        }
-        vt.push_back(make_pair(x, y));
-    }
+    for (double x = a; x <= b; x += step) vt.push_back(make_pair(x, calculateY(x, n)));
     cout << "\n--- CALCULATION ---\n\nThe program is calculating function values...\nCalculation completed successfully!\n\nPress B to return to the Main Menu...\n";
     char B = _getch();
     while (toupper(B) != 'B') B = _getch();
     system("cls");
+    results.push_back(vt);
 }
+
 
 void inputN() {
     while (true) {
-        cout << "Enter n (n > 1): ";
-        double temp;
-        if (!(cin >> temp)) {
-            cout << "Error: wrong data type. Please enter an integer!" << endl;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            continue;
-        }
-        if (temp != (int)temp) {
-            cout << "Error: n must be an integer!" << endl;
-            continue;
-        }
-        n = (int)temp;
-        if (n > 1) {
+        try {
+            cout << "Enter n (n > 1): ";
+            double temp;
+            if (!(cin >> temp)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                throw "wrong data type. Please enter an integer!";
+            }
+            ValidateN(temp);
+
             cout << "Option added successfully!" << endl;
             return;
         }
-        cout << "Error: n must be greater than 1!" << endl;
+        catch (const char* errorhandle) {
+            cout << "Error: " << errorhandle << '\n';
+        }
     }
 }
+
 
 void inputRange() {
     while (true) {
-        cout << "Enter range (a, b) where a <= b: ";
-        if (!(cin >> a >> b)) {
-            cout << "Error: wrong data type. Please enter two numbers!" << endl;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            continue;
-        }
-        if (a <= b) {
+        try {
+            cout << "Enter range (a, b) where a <= b: ";
+            if (!(cin >> a >> b)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                throw "wrong data type. Please enter two numbers!";
+            }
+            ValidateRange(a, b);
+
             cout << "Option added successfully!" << endl;
             return;
         }
-        cout << "Error: a must be less than or equal to b!" << endl;
+        catch (const char* errorhandle) {
+            cout << "Error: " << errorhandle << '\n';
+        }
     }
 }
 
+
 void inputStep() {
     while (true) {
-        cout << "Enter step > 0: ";
-        if (!(cin >> step)) {
-            cout << "Error: wrong data type. Please enter a number!" << endl;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            continue;
-        }
-        if (step > 0) {
+        try {
+            cout << "Enter step > 0: ";
+            if (!(cin >> step)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                throw "wrong data type.Please enter a number!";
+            }
+            ValidateStep(step);
+
             cout << "Option added successfully!" << endl;
             return;
         }
-        cout << "Error: step must be greater than 0!" << endl;
+        catch (const char* errorhandle) {
+            cout << "Error: " << errorhandle << '\n';
+        }
     }
 }
+
 
 void Input() {
     cout << "--- ENTER PARAMETERS ---\n\n";
@@ -138,6 +138,13 @@ void Input() {
     system("cls");
 }
 
+
+void output_spec(int ind) {
+    for (auto val : results[ind - 1]) {
+        cout << val.first << " " << val.second << '\n';
+    }
+    this_thread::sleep_for(chrono::seconds(3));
+}
 void Main_Menu() {
     char choice;
     bool calc = false, inp = false;
@@ -181,9 +188,14 @@ void Main_Menu() {
             system("cls");
             Exits();
             break;
+        case '5':
+            system("cls");
+            char chs = _getch();
+            output_spec(chs - '0');
         }
     } while (true);
 }
+
 
 int main() {
     cout << "=========================================\nWelcome to " << '"' << "Calculator of Function 23" << '"' << "\n=========================================\n\nThis program will help you calculate the function values within a given range.\n\nPress[N] to go to the Main Menu\n";
