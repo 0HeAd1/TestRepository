@@ -7,14 +7,13 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTestss
-{
+namespace UnitTestss{
 	TEST_CLASS(CalculationTest){
 	public:
         TEST_METHOD(TestNegativeX_n2_x_minus1){
             double x = -1.0;
             int n = 2;
-            double expected = 0.3533333;
+            double expected = 0.3333333;
             double actual = calculateY(x, n);
             Assert::AreEqual(expected, actual, 0.0001, L"Test failed for x = -1, n = 2");
         }

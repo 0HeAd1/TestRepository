@@ -29,7 +29,6 @@ void Exits() {
     system("cls");
 }
 
-
 void Print() {
     cout << "---RESULTS TABLE---\n\n--------------------------------------\n";
     cout << setw(3) << "#" << setw(10) << "x" << setw(15) << "y" << "\n";
@@ -48,7 +47,6 @@ void Print() {
     system("cls");
 }
 
-
 void calculate() {
     vt.clear();
     for (double x = a; x <= b; x += step) vt.push_back(make_pair(x, calculateY(x, n)));
@@ -59,7 +57,6 @@ void calculate() {
     results.push_back(vt);
 }
 
-
 void inputN() {
     while (true) {
         try {
@@ -68,19 +65,18 @@ void inputN() {
             if (!(cin >> temp)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                throw "wrong data type. Please enter an integer!";
+                throw invalid_argument("wrong data type.Please enter a number!");
             }
             ValidateN(temp);
 
             cout << "Option added successfully!" << endl;
             return;
         }
-        catch (const char* errorhandle) {
-            cout << "Error: " << errorhandle << '\n';
+        catch (const std::exception& e) {
+            cout << "Error: " << e.what() << '\n';
         }
     }
 }
-
 
 void inputRange() {
     while (true) {
@@ -89,19 +85,18 @@ void inputRange() {
             if (!(cin >> a >> b)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                throw "wrong data type. Please enter two numbers!";
+                throw invalid_argument("wrong data type.Please enter a number!");
             }
             ValidateRange(a, b);
 
             cout << "Option added successfully!" << endl;
             return;
         }
-        catch (const char* errorhandle) {
-            cout << "Error: " << errorhandle << '\n';
+        catch (const std::exception& e) {
+            cout << "Error: " << e.what() << '\n';
         }
     }
 }
-
 
 void inputStep() {
     while (true) {
@@ -110,19 +105,18 @@ void inputStep() {
             if (!(cin >> step)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                throw "wrong data type.Please enter a number!";
+                throw invalid_argument("wrong data type.Please enter a number!");
             }
             ValidateStep(step);
 
             cout << "Option added successfully!" << endl;
             return;
         }
-        catch (const char* errorhandle) {
-            cout << "Error: " << errorhandle << '\n';
+        catch (const std::exception& e) {
+            cout << "Error: " << e.what() << '\n';
         }
     }
 }
-
 
 void Input() {
     cout << "--- ENTER PARAMETERS ---\n\n";
@@ -138,13 +132,13 @@ void Input() {
     system("cls");
 }
 
-
 void output_spec(int ind) {
     for (auto val : results[ind - 1]) {
         cout << val.first << " " << val.second << '\n';
     }
     this_thread::sleep_for(chrono::seconds(3));
 }
+
 void Main_Menu() {
     char choice;
     bool calc = false, inp = false;
@@ -195,7 +189,6 @@ void Main_Menu() {
         }
     } while (true);
 }
-
 
 int main() {
     cout << "=========================================\nWelcome to " << '"' << "Calculator of Function 23" << '"' << "\n=========================================\n\nThis program will help you calculate the function values within a given range.\n\nPress[N] to go to the Main Menu\n";
